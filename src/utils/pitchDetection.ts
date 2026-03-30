@@ -15,14 +15,26 @@ export function rms(buffer: Float32Array): number {
   return Math.sqrt(sum / buffer.length)
 }
 
+export interface PitchDetectionOptions {
+  /** Minimum detectable frequency in Hz (default: 65 Hz, guitar low E) */
+  minFreq?: number
+  /** Maximum detectable frequency in Hz (default: 1300 Hz, guitar high range) */
+  maxFreq?: number
+}
+
 /**
  * Autocorrelation-based pitch detection.
  *
  * @param buffer  - PCM float32 samples (mono)
  * @param sampleRate - audio context sample rate (e.g. 44100)
+ * @param options - optional frequency range overrides (for chromatic/bass modes)
  * @returns detected frequency in Hz, or null if not confident
  */
-export function detectPitch(buffer: Float32Array, sampleRate: number): number | null {
+export function detectPitch(
+  buffer: Float32Array,
+  sampleRate: number,
+  options?: PitchDetectionOptions,
+): number | null {
   const SIZE = buffer.length
 
   // Gate: ignore very quiet signals (background noise)
@@ -40,13 +52,12 @@ export function detectPitch(buffer: Float32Array, sampleRate: number): number | 
   }
 
   // ── Step 2: Find the first dip then the first peak after it ────────────
-  // This is the key step of the YIN algorithm simplified to autocorrelation.
-  // We skip the DC component (lag 0) and look for the first lag where
-  // correlation drops below its neighbours, then rises to a local peak.
+  // Map frequency range we care about
+  const maxFreq = options?.maxFreq ?? 1300
+  const minFreq = options?.minFreq ?? 65
 
-  // Map frequency range we care about (guitar: ~75 Hz E2 to ~1050 Hz C6)
-  const minLag = Math.floor(sampleRate / 1300) // ~1300 Hz ceiling
-  const maxLag = Math.ceil(sampleRate / 65)    // ~65 Hz floor
+  const minLag = Math.floor(sampleRate / maxFreq)
+  const maxLag = Math.ceil(sampleRate / minFreq)
 
   // Find the first "valley" after lag 0
   let valleyEnd = minLag
