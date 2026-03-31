@@ -53,6 +53,7 @@ export const Tuner: React.FC = () => {
   const handleDismissOnboarding = () => {
     setShowOnboarding(false)
     try { localStorage.setItem(LS_ONBOARDING, 'true') } catch { /* ignore */ }
+    handleStart()
   }
 
   // Dynamic glow class on the main card
