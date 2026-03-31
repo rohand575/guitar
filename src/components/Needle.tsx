@@ -66,8 +66,8 @@ export const Needle: React.FC<NeedleProps> = ({
   signalLevel,
 }) => {
   // DOM refs — animated directly, zero React re-renders in the loop
-  const needleLineRef  = useRef<SVGLineElement>(null)
-  const needleGlowRef  = useRef<SVGLineElement>(null)
+  const needleLineRef  = useRef<SVGPolygonElement>(null)
+  const needleGlowRef  = useRef<SVGPolygonElement>(null)
   const pivotOuterRef  = useRef<SVGCircleElement>(null)
   const pivotInnerRef  = useRef<SVGCircleElement>(null)
   const activeBandRef  = useRef<SVGPathElement>(null)
@@ -117,8 +117,8 @@ export const Needle: React.FC<NeedleProps> = ({
       if (color !== colorCacheRef.current) {
         colorCacheRef.current = color
         pivotOuterRef.current?.setAttribute('fill', color)
-        needleLineRef.current?.setAttribute('stroke', color)
-        needleGlowRef.current?.setAttribute('stroke', getGlow(tuningStatus, isListening))
+        needleLineRef.current?.setAttribute('fill', color)
+        needleGlowRef.current?.setAttribute('fill', getGlow(tuningStatus, isListening))
       }
 
       // ── Active deviation arc ───────────────────────────────────────────
@@ -286,27 +286,21 @@ export const Needle: React.FC<NeedleProps> = ({
           textAnchor="middle" opacity="0.7"
         >#</text>
 
-        {/* ── Needle glow (blurred copy, same refs animate it) ────────── */}
-        <line
+        {/* ── Needle glow (wide blurred kite, same refs animate it) ──── */}
+        <polygon
           ref={needleGlowRef}
-          x1={CX} y1={CY + NEEDLE_TAIL}
-          x2={CX} y2={CY - NEEDLE_LEN}
-          stroke="rgba(255,255,255,0.05)"
-          strokeWidth="10"
-          strokeLinecap="round"
+          points={`${CX},${CY - NEEDLE_LEN} ${CX + 8},${CY + 4} ${CX},${CY + NEEDLE_TAIL} ${CX - 8},${CY + 4}`}
+          fill="rgba(255,255,255,0.05)"
           filter="url(#sg)"
           opacity={isListening ? signalLevel * 0.8 : 0}
           style={{ transition: 'opacity 0.3s ease' }}
         />
 
-        {/* ── Needle ─────────────────────────────────────────────────── */}
-        <line
+        {/* ── Needle (kite polygon: pointed tip, wide at pivot, tail) ── */}
+        <polygon
           ref={needleLineRef}
-          x1={CX} y1={CY + NEEDLE_TAIL}
-          x2={CX} y2={CY - NEEDLE_LEN}
-          stroke="rgba(255,255,255,0.15)"
-          strokeWidth="2"
-          strokeLinecap="round"
+          points={`${CX},${CY - NEEDLE_LEN} ${CX + 2.8},${CY + 2} ${CX},${CY + NEEDLE_TAIL} ${CX - 2.8},${CY + 2}`}
+          fill="rgba(255,255,255,0.15)"
           filter="url(#ng)"
         />
 
