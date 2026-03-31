@@ -68,7 +68,7 @@ export const Tuner: React.FC = () => {
       {/* First-time onboarding overlay */}
       {showOnboarding && <Onboarding onDismiss={handleDismissOnboarding} />}
 
-      <div className="min-h-screen flex flex-col items-center justify-between py-6 px-4 relative overflow-hidden">
+      <div className="min-h-screen flex flex-col items-center justify-between py-2 sm:py-4 px-4 relative overflow-hidden">
         {/* Background layers */}
         <div className="fixed inset-0 -z-10" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0d0d1a] to-[#0a0a0f]" />
@@ -101,7 +101,7 @@ export const Tuner: React.FC = () => {
         </div>
 
         {/* ── Header ─────────────────────────────────────────────────────────── */}
-        <header className="w-full max-w-md animate-fade-in">
+        <header className="w-full max-w-3xl animate-fade-in">
           {/* Top row: logo + tuning selector */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -162,46 +162,52 @@ export const Tuner: React.FC = () => {
         </header>
 
         {/* ── Main card ──────────────────────────────────────────────────────── */}
-        <main className="w-full max-w-md flex flex-col items-center gap-6 animate-scale-in">
+        <main className="w-full max-w-3xl flex flex-col items-center gap-2 sm:gap-4 animate-scale-in">
 
           {/* Meter card */}
           <div
             className={`
-              w-full glass rounded-3xl p-6 pb-5 flex flex-col items-center gap-5
+              w-full glass rounded-3xl p-4 sm:p-5
+              grid grid-cols-1 md:grid-cols-2 md:gap-6 items-center
               transition-all duration-500
               ${cardGlow}
             `}
           >
-            {/* Needle meter */}
-            <Needle
-              position={needlePosition}
-              tuningStatus={tuningStatus}
-              isListening={isListening}
-              signalLevel={signalLevel}
-            />
+            {/* Left col: Needle meter */}
+            <div className="flex flex-col items-center justify-center">
+              <Needle
+                position={needlePosition}
+                tuningStatus={tuningStatus}
+                isListening={isListening}
+                signalLevel={signalLevel}
+              />
+            </div>
 
-            {/* Note display */}
-            <NoteDisplay
-              note={note}
-              octave={octave}
-              tuningStatus={tuningStatus}
-              isListening={isListening}
-              tuneInCount={tuneInCount}
-            />
+            {/* Right col: Note + Frequency + Signal (on mobile these stack below needle) */}
+            <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mt-2 md:mt-0">
+              {/* Note display */}
+              <NoteDisplay
+                note={note}
+                octave={octave}
+                tuningStatus={tuningStatus}
+                isListening={isListening}
+                tuneInCount={tuneInCount}
+              />
 
-            {/* Frequency + cents + sparkline */}
-            <FrequencyDisplay
-              frequency={frequency}
-              cents={cents}
-              isListening={isListening}
-              centsHistory={centsHistory}
-            />
+              {/* Frequency + cents + sparkline */}
+              <FrequencyDisplay
+                frequency={frequency}
+                cents={cents}
+                isListening={isListening}
+                centsHistory={centsHistory}
+              />
 
-            {/* Divider */}
-            <div className="w-full h-px bg-white/6" />
+              {/* Divider */}
+              <div className="w-full h-px bg-white/6" />
 
-            {/* Signal meter */}
-            <SignalMeter level={signalLevel} isListening={isListening} />
+              {/* Signal meter */}
+              <SignalMeter level={signalLevel} isListening={isListening} />
+            </div>
           </div>
 
           {/* String indicator (hidden in chromatic mode) */}
@@ -233,7 +239,7 @@ export const Tuner: React.FC = () => {
         </main>
 
         {/* ── Footer ─────────────────────────────────────────────────────────── */}
-        <footer className="w-full max-w-md flex flex-col items-center gap-4 animate-fade-in">
+        <footer className="w-full max-w-3xl flex flex-col items-center gap-2 sm:gap-4 animate-fade-in">
           <StartButton
             isListening={isListening}
             isLoading={isLoading}

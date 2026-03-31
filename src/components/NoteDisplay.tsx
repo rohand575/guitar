@@ -76,7 +76,7 @@ export const NoteDisplay: React.FC<NoteDisplayProps> = ({
         <span
           ref={noteRef}
           className={`font-black tracking-tight transition-all duration-300 ${noteColor}`}
-          style={{ fontSize: 'clamp(80px, 18vw, 140px)', lineHeight: 1 }}
+          style={{ fontSize: 'clamp(56px, 14vw, 120px)', lineHeight: 1 }}
           aria-label={isListening && note !== '-' ? `Note ${note} octave ${octave}` : undefined}
         >
           {note}
@@ -85,7 +85,7 @@ export const NoteDisplay: React.FC<NoteDisplayProps> = ({
         {note !== '-' && isListening && (
           <span
             className="font-semibold text-white/40 mt-3 ml-1"
-            style={{ fontSize: 'clamp(18px, 4vw, 28px)' }}
+            style={{ fontSize: 'clamp(14px, 3vw, 24px)' }}
             aria-hidden="true"
           >
             {octave}
