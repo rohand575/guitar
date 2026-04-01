@@ -227,6 +227,12 @@ export const Needle: React.FC<NeedleProps> = ({
           fill="rgba(255,255,255,0.025)"
         />
 
+        {/* ── Centre in-tune zone (±5° band, always visible as target) ── */}
+        <path
+          d={arcBand(CX, CY, INNER_R + 4, OUTER_R - 2, -5, 5)}
+          fill="rgba(34,197,94,0.12)"
+        />
+
         {/* ── Outer arc track ────────────────────────────────────────── */}
         <path
           d={arcPath(CX, CY, OUTER_R, -ARC_HALF, ARC_HALF)}

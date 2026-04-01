@@ -41,13 +41,18 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onDismiss }) => {
       >
         {/* Header */}
         <div className="flex items-start justify-between mb-5">
-          <div>
-            <h2 className="text-white font-bold text-lg tracking-tight">
-              How to tune
-            </h2>
-            <p className="text-white/40 text-sm mt-0.5">
-              Three quick steps
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+              <img src="/logo.png" alt="Guitar Tuner" className="w-[300%] h-[300%] object-cover" style={{ transform: 'translate(-33%, -33%)' }} />
+            </div>
+            <div>
+              <h2 className="text-white font-bold text-lg tracking-tight">
+                How to tune
+              </h2>
+              <p className="text-white/40 text-sm mt-0.5">
+                Three quick steps
+              </p>
+            </div>
           </div>
           <button
             onClick={onDismiss}

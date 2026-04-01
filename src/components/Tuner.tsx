@@ -1,5 +1,5 @@
 import React from 'react'
-import { AlertCircle, Guitar, Radio, Music2 } from 'lucide-react'
+import { AlertCircle, Radio, Music2 } from 'lucide-react'
 import { useTuner } from '../hooks/useTuner'
 import { Needle } from './Needle'
 import { NoteDisplay } from './NoteDisplay'
@@ -63,6 +63,21 @@ export const Tuner: React.FC = () => {
     : tuningStatus === 'flat'    ? 'glow-blue'
     : 'glow-red'
 
+  // Reactive border color for the main card
+  const cardBorderColor =
+    !isListening || tuningStatus === 'idle'
+      ? 'rgba(255,255,255,0.08)'
+      : tuningStatus === 'in-tune' ? 'rgba(34,197,94,0.4)'
+      : tuningStatus === 'flat'    ? 'rgba(59,130,246,0.4)'
+      : 'rgba(239,68,68,0.4)'
+
+  // Reactive orb color for the top accent
+  const orbTopColor =
+    !isListening || tuningStatus === 'idle' ? '#6c63ff'
+    : tuningStatus === 'in-tune' ? '#22c55e'
+    : tuningStatus === 'flat'    ? '#3b82f6'
+    : '#ef4444'
+
   return (
     <>
       {/* First-time onboarding overlay */}
@@ -72,13 +87,16 @@ export const Tuner: React.FC = () => {
         {/* Background layers */}
         <div className="fixed inset-0 -z-10" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0d0d1a] to-[#0a0a0f]" />
+          {/* Dot grid texture */}
+          <div className="absolute inset-0 dot-grid pointer-events-none" />
           <div
             className="absolute w-[600px] h-[600px] rounded-full opacity-10 blur-3xl pointer-events-none"
             style={{
               top: '-10%',
               left: '50%',
               transform: 'translateX(-50%)',
-              background: 'radial-gradient(circle, #6c63ff 0%, transparent 70%)',
+              background: `radial-gradient(circle, ${orbTopColor} 0%, transparent 70%)`,
+              transition: 'background 0.8s ease',
             }}
           />
           <div
@@ -104,14 +122,11 @@ export const Tuner: React.FC = () => {
         <header className="w-full max-w-3xl animate-fade-in">
           {/* Top row: logo + tuning selector */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #6c63ff, #a855f7)' }}
-              >
-                <Guitar size={16} className="text-white" aria-hidden="true" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                <img src="/logo.png" alt="Guitar Tuner" className="w-[300%] h-[300%] object-cover" style={{ transform: 'translate(-33%, -33%)' }} />
               </div>
-              <span className="font-bold text-white tracking-tight" style={{ fontSize: 18 }}>
+              <span className="shimmer-text font-bold tracking-tight" style={{ fontSize: 18 }}>
                 Guitar
               </span>
             </div>
@@ -172,6 +187,7 @@ export const Tuner: React.FC = () => {
               transition-all duration-500
               ${cardGlow}
             `}
+            style={{ borderColor: cardBorderColor, transition: 'border-color 0.5s ease, box-shadow 0.5s ease' }}
           >
             {/* Left col: Needle meter */}
             <div className="flex flex-col items-center justify-center">

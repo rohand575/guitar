@@ -65,8 +65,9 @@ export const StringIndicator: React.FC<StringIndicatorProps> = ({
           const tuned  = tunedStrings.has(`${string.note}${string.octave}`)
           const pulsing = pulsingSet.has(i)
 
-          // String thickness: low E is thickest
-          const thicknessClass = i === 0 ? 'w-10 h-10' : i === 1 ? 'w-9 h-9' : 'w-8 h-8'
+          // String thickness: low E is thickest, mirrors real string gauge proportions
+          const sizes = ['w-11 h-11', 'w-10 h-10', 'w-9 h-9', 'w-8 h-8', 'w-7 h-7', 'w-6 h-6']
+          const thicknessClass = sizes[i] ?? 'w-8 h-8'
 
           return (
             <div

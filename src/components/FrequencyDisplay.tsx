@@ -29,7 +29,7 @@ export const FrequencyDisplay: React.FC<FrequencyDisplayProps> = ({
           </span>
           <div className="flex items-baseline gap-1">
             <span
-              className={`font-bold tabular-nums transition-all duration-200 ${
+              className={`font-bold font-mono-digits transition-all duration-200 ${
                 isListening && frequency ? 'text-white' : 'text-white/20'
               }`}
               style={{ fontSize: 'clamp(22px, 5vw, 32px)' }}
@@ -50,7 +50,7 @@ export const FrequencyDisplay: React.FC<FrequencyDisplayProps> = ({
           </span>
           <div className="flex items-baseline gap-0.5">
             <span
-              className={`font-bold tabular-nums transition-all duration-200 ${
+              className={`font-bold font-mono-digits transition-all duration-200 ${
                 isListening && frequency
                   ? Math.abs(cents) <= 5
                     ? 'text-green-400'
@@ -93,7 +93,7 @@ export const FrequencyDisplay: React.FC<FrequencyDisplayProps> = ({
             return (
               <div
                 key={i}
-                className={`w-1 rounded-full transition-all duration-75 ${barColor}`}
+                className={`w-1.5 rounded-full transition-all duration-75 ${barColor}`}
                 style={{ height: heightPx }}
               />
             )
