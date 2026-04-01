@@ -2,8 +2,11 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { detectPitch, createAnalyser } from '../utils/pitchDetection'
 import {
   frequencyToNote,
+  centsFromFrequency,
   centsToNeedlePosition,
   getTuningStatus,
+  findClosestString,
+  midiToFrequency,
   TUNING_PRESETS,
   DEFAULT_A4_FREQ,
   type TuningStatus,
@@ -21,9 +24,9 @@ const CENTS_HISTORY_SIZE = 20
 const IN_TUNE_HOLD_MS = 800
 
 // Smoothing factor for frequency readings (0 = no smoothing, 1 = never updates)
-const FREQ_SMOOTHING = 0.6
+const FREQ_SMOOTHING = 0.4
 // How many consecutive similar readings to require before committing a note change
-const NOTE_STABILITY_FRAMES = 3
+const NOTE_STABILITY_FRAMES = 2
 
 export interface TunerState {
   isListening: boolean
@@ -121,6 +124,7 @@ export function useTuner(): UseTunerReturn {
   // New feature refs
   const a4FreqRef        = useRef<number>(loadA4Frequency())
   const chromaticRef     = useRef<boolean>(loadChromaticMode())
+  const presetRef        = useRef<TuningPreset>(loadPreset())
   const prevStatusRef    = useRef<TuningStatus>('idle')
   const inTuneStartRef   = useRef<number | null>(null)
   const tunedStringsRef  = useRef<Set<string>>(new Set())
@@ -156,7 +160,28 @@ export function useTuner(): UseTunerReturn {
           : FREQ_SMOOTHING * smoothedFreqRef.current + (1 - FREQ_SMOOTHING) * rawFreq
 
       const freq = smoothedFreqRef.current
-      const { note, octave, cents } = frequencyToNote(freq, a4FreqRef.current)
+
+      let note: string, octave: number, cents: number
+      if (chromaticRef.current) {
+        const result = frequencyToNote(freq, a4FreqRef.current)
+        note = result.note
+        octave = result.octave
+        cents = result.cents
+      } else {
+        const closest = findClosestString(freq, presetRef.current, a4FreqRef.current)
+        if (closest) {
+          note = closest.note
+          octave = closest.octave
+          const targetFreq = midiToFrequency(closest.midi, a4FreqRef.current)
+          cents = centsFromFrequency(freq, targetFreq)
+        } else {
+          const result = frequencyToNote(freq, a4FreqRef.current)
+          note = result.note
+          octave = result.octave
+          cents = result.cents
+        }
+      }
+
       const noteKey = `${note}${octave}`
 
       // Require stable note readings before updating UI
@@ -240,8 +265,8 @@ export function useTuner(): UseTunerReturn {
       setState(prev => ({
         ...prev,
         signalLevel: prev.signalLevel * 0.85,
-        tuningStatus: prev.signalLevel < 0.05 ? 'idle' : prev.tuningStatus,
-        needlePosition: prev.signalLevel < 0.05 ? 0 : prev.needlePosition,
+        tuningStatus: 'idle',
+        needlePosition: Math.abs(prev.needlePosition) < 0.01 ? 0 : prev.needlePosition * 0.8,
         centsHistory: [],
       }))
       smoothedFreqRef.current = null
@@ -311,6 +336,7 @@ export function useTuner(): UseTunerReturn {
 
   const setPreset = useCallback((preset: TuningPreset) => {
     setSelectedPreset(preset)
+    presetRef.current = preset
     // Reset tuned strings when switching preset
     tunedStringsRef.current = new Set()
     setState(prev => ({ ...prev, tunedStrings: new Set() }))

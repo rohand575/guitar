@@ -75,6 +75,15 @@ export function frequencyToNote(
 }
 
 /**
+ * Compute the cents difference between a detected frequency and a target frequency.
+ * Positive = sharp, negative = flat.
+ */
+export function centsFromFrequency(detected: number, target: number): number {
+  if (detected <= 0 || target <= 0) return 0
+  return Math.round(1200 * Math.log2(detected / target))
+}
+
+/**
  * Returns a clamped percentage (-1 to 1) for the needle position
  * based on cents offset. 50 cents = full deflection.
  */

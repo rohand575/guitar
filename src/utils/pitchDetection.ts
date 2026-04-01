@@ -39,7 +39,7 @@ export function detectPitch(
 
   // Gate: ignore very quiet signals (background noise)
   const signal = rms(buffer)
-  if (signal < 0.01) return null
+  if (signal < 0.005) return null
 
   // ── Step 1: Autocorrelation ────────────────────────────────────────────
   const correlations = new Float32Array(SIZE)
@@ -76,9 +76,9 @@ export function detectPitch(
   }
 
   // ── Step 3: Confidence check ───────────────────────────────────────────
-  // Reject weak or ambiguous peaks (peak must be at least 50% of lag-0 value)
+  // Reject weak or ambiguous peaks (peak must be at least 30% of lag-0 value)
   const confidence = correlations[peakLag] / correlations[0]
-  if (confidence < 0.5) return null
+  if (confidence < 0.3) return null
 
   // ── Step 4: Parabolic interpolation for sub-sample accuracy ───────────
   const prevLag = peakLag > 1 ? peakLag - 1 : peakLag
