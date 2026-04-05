@@ -20,7 +20,7 @@ export const FrequencyDisplay: React.FC<FrequencyDisplayProps> = ({
     : `${cents}`
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full">
+    <div className="flex flex-col items-center gap-2 sm:gap-3 w-full">
       <div className="flex items-center justify-center gap-6">
         {/* Frequency */}
         <div className="flex flex-col items-center gap-0.5">

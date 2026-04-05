@@ -27,7 +27,7 @@ export const StartButton: React.FC<StartButtonProps> = ({
       aria-label={isListening ? 'Stop tuner' : 'Start tuner'}
       className={`
         relative flex items-center justify-center gap-3
-        px-8 py-4 rounded-2xl
+        w-full sm:w-auto px-8 py-4 rounded-2xl
         font-semibold text-base tracking-wide
         btn-press transition-all duration-300
         focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent

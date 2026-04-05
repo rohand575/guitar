@@ -328,7 +328,7 @@ export const Needle: React.FC<NeedleProps> = ({
       </svg>
 
       {/* ── Scale labels ─────────────────────────────────────────────── */}
-      <div className="flex w-full justify-between px-4 -mt-3" style={{ maxWidth: 400 }}>
+      <div className="flex w-full justify-between px-2 sm:px-4 -mt-2 sm:-mt-3" style={{ maxWidth: 400 }}>
         <span className="text-blue-400/50 text-[10px] font-semibold tracking-[0.18em] uppercase">Flat</span>
         <span className="text-green-400/50 text-[10px] font-semibold tracking-[0.18em] uppercase">In Tune</span>
         <span className="text-red-400/50 text-[10px] font-semibold tracking-[0.18em] uppercase">Sharp</span>

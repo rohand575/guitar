@@ -56,7 +56,7 @@ export const StringIndicator: React.FC<StringIndicatorProps> = ({
       )}
 
       <div
-        className="flex items-center justify-center gap-3"
+        className="flex items-center justify-center gap-2 sm:gap-3"
         role="list"
         aria-label="Guitar strings"
       >
@@ -66,8 +66,15 @@ export const StringIndicator: React.FC<StringIndicatorProps> = ({
           const pulsing = pulsingSet.has(i)
 
           // String thickness: low E is thickest, mirrors real string gauge proportions
-          const sizes = ['w-11 h-11', 'w-10 h-10', 'w-9 h-9', 'w-8 h-8', 'w-7 h-7', 'w-6 h-6']
-          const thicknessClass = sizes[i] ?? 'w-8 h-8'
+          const sizes = [
+            'w-9 h-9 sm:w-11 sm:h-11',
+            'w-8 h-8 sm:w-10 sm:h-10',
+            'w-7 h-7 sm:w-9 sm:h-9',
+            'w-7 h-7 sm:w-8 sm:h-8',
+            'w-6 h-6 sm:w-7 sm:h-7',
+            'w-6 h-6',
+          ]
+          const thicknessClass = sizes[i] ?? 'w-7 h-7'
 
           return (
             <div

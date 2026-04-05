@@ -70,13 +70,13 @@ export const NoteDisplay: React.FC<NoteDisplayProps> = ({
   }, [tuneInCount])
 
   return (
-    <div className="flex flex-col items-center gap-3 select-none">
+    <div className="flex flex-col items-center gap-2 sm:gap-3 select-none">
       {/* Note name */}
       <div className="relative flex items-start justify-center">
         <span
           ref={noteRef}
           className={`font-black tracking-tight transition-all duration-300 ${noteColor}`}
-          style={{ fontSize: 'clamp(56px, 14vw, 120px)', lineHeight: 1 }}
+          style={{ fontSize: 'clamp(48px, 13vw, 120px)', lineHeight: 1 }}
           aria-label={isListening && note !== '-' ? `Note ${note} octave ${octave}` : undefined}
         >
           {note}
